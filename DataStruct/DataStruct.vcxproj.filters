@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="头文件\LinList">
+      <UniqueIdentifier>{6b842753-372f-4c36-a26b-ec7144b79ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\HashTable">
+      <UniqueIdentifier>{63de7fab-79e7-4de5-9003-a2b6e9325e98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Tree">
+      <UniqueIdentifier>{afe9a985-020b-4a8e-8cb8-51e799d999be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Stack">
+      <UniqueIdentifier>{5501f1c0-8870-4a92-9a8d-77008913ecf3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Queue">
+      <UniqueIdentifier>{16e7f583-a89f-4d37-a12b-85eba89821ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\Sorted">
+      <UniqueIdentifier>{20b0556b-a909-4646-85eb-1287b066d622}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MaxHeapSort.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Exception.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MaxHeap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Chain.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="DoublyChain.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="Sequence.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="SimChain.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="String.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="ChainHashTable.h">
+      <Filter>头文件\HashTable</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>头文件\HashTable</Filter>
+    </ClInclude>
+    <ClInclude Include="RBTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="FreeList.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularChainDn.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularChain.h">
+      <Filter>头文件\LinList</Filter>
+    </ClInclude>
+    <ClInclude Include="StackSeq.h">
+      <Filter>头文件\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="StackChain.h">
+      <Filter>头文件\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="DoubleStack.h">
+      <Filter>头文件\Stack</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularQueue.h">
+      <Filter>头文件\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="QueueChain.h">
+      <Filter>头文件\Queue</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadBinaryTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="AvlTree.h">
+      <Filter>头文件\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="SortedChain.h">
+      <Filter>头文件\Sorted</Filter>
+    </ClInclude>
+    <ClInclude Include="SortedList.h">
+      <Filter>头文件\Sorted</Filter>
+    </ClInclude>
+    <ClInclude Include="SkipList.h">
+      <Filter>头文件\Sorted</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
