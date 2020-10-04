@@ -26,6 +26,7 @@ class StackChain
 {
 public:
 	StackChain();
+	StackChain(const StackChain<T>& s);
 	~StackChain();
 	bool IsEmpty() const;
 	bool IsFull() const;
@@ -45,6 +46,36 @@ StackChain<T>::StackChain()
 }
 
 template<class T>
+StackChain<T>::StackChain(const StackChain<T>& s)
+{
+	StackChainNode<T>* pCur = s.top;
+	StackChainNode<T>* pPre = new StackChainNode<T>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		top = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur)
+	{
+		StackChainNode<T>* pNode = new StackChainNode<T>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+		pPre->next = NULL;
+	}
+}
+
+template<class T>
 StackChain<T>::~StackChain()
 {
 	StackChainNode<T>* pCur = NULL;
@@ -59,7 +90,7 @@ StackChain<T>::~StackChain()
 template<class T>
 bool StackChain<T>::IsEmpty() const
 { 
-	return top == NULL; 
+	return top == NULL;//ÀàËÆÁ´±íµÄfirst == NULL 
 }
 
 template<class T>

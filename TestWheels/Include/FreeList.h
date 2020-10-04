@@ -21,6 +21,7 @@ class FreeList
 {
 public:
 	FreeList(int MaxSize = 100);
+	FreeList(FreeList<T>& l) = delete;//²»ÔÊÐí¿½±´
 	~FreeList();
 	FreeNode<T>* Allocate();
 	void Deallocate(FreeNode<T>* p);

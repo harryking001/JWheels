@@ -16,7 +16,8 @@ template<class T>
 class DoubleStack
 {
 public:
-	DoubleStack(int MaxSize = 5);
+	DoubleStack(int MaxSize = 10);
+	DoubleStack(const DoubleStack<T>& s);
 	~DoubleStack();	
 	bool IsEmpty() const;
 	bool IsFull() const;
@@ -26,7 +27,7 @@ public:
 	void Output(ostream& out, int stackNum) const;
 	void Erase(int stackNum);
 private:
-	T* element;
+	T* stack;
 	int maxSize;
 	int top1;
 	int top2;
@@ -36,16 +37,29 @@ template<class T>
 DoubleStack<T>::DoubleStack(int MaxSize)
 {
 	maxSize = MaxSize;
-	element = new T[MaxSize];
+	stack = new T[MaxSize];
 	top1 = -1;
 	top2 = maxSize;
 }
 
 template<class T>
+DoubleStack<T>::DoubleStack(const DoubleStack<T>& s)
+{
+	maxSize = s.maxSize;
+	top1 = s.top1;
+	top2 = s.top2;
+	stack = new T[maxSize];
+	for (int i = 0; i < maxSize; i++)
+	{
+		stack[i] = s.stack[i];
+	}
+}
+
+template<class T>
 DoubleStack<T>::~DoubleStack()
 {
-	delete[] element;
-	element = NULL;
+	delete[] stack;
+	stack = NULL;
 	top1 = -1;
 	top2 = maxSize;
 	maxSize = 0;
@@ -72,11 +86,11 @@ T DoubleStack<T>::Top(int stackNum) const
 	}
 	if (stackNum == 1)
 	{
-		return element[top1];
+		return stack[top1];
 	}
 	else if (stackNum == 2)
 	{
-		return element[top2];
+		return stack[top2];
 	}
 }
 
@@ -89,11 +103,11 @@ DoubleStack<T>& DoubleStack<T>::Push(const T& t, int stackNum)
 	}
 	if (stackNum == 1)
 	{
-		element[++top1] = t;
+		stack[++top1] = t;
 	}
 	else if (stackNum == 2)
 	{
-		element[--top2] = t;
+		stack[--top2] = t;
 	}
 	return *this;
 }
@@ -107,11 +121,11 @@ DoubleStack<T>& DoubleStack<T>::Pop(T& t, int stackNum)
 	}
 	if (stackNum == 1)
 	{
-		t = element[top1--];
+		t = stack[top1--];
 	}
 	else if (stackNum == 2)
 	{
-		t = element[top2++];
+		t = stack[top2++];
 	}
 	else
 	{
@@ -127,14 +141,14 @@ void DoubleStack<T>::Output(ostream& out, int stackNum) const
 	{
         for (int i = 0; i <= top1; i++)
         {
-        	out << element[i] << " ";
+        	out << stack[i] << " ";
         }
 	}
 	else if(stackNum == 2)
 	{
 		for (int i = maxSize - 1; i >= top2; i--)
 		{
-			out << element[i] << " ";
+			out << stack[i] << " ";
 		}
 	}
 	else

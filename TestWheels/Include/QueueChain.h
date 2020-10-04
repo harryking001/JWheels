@@ -27,6 +27,7 @@ class QueueChain
 {
 public:
 	QueueChain();
+	QueueChain(const QueueChain<T>& q);
 	~QueueChain();
 	bool IsEmpty() const;
 	bool IsFull() const;
@@ -43,6 +44,36 @@ template<class T>
 QueueChain<T>::QueueChain()
 {
 	front = rear = NULL;
+}
+
+template<class T>
+QueueChain<T>::QueueChain(const QueueChain<T>& q)
+{
+	QueueChainNode<T>* pCur = q.front;
+	QueueChainNode<T>* pPre = new QueueChainNode<T>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		front = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur)
+	{
+		QueueChainNode<T>* pNode = new QueueChainNode<T>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+		pPre->next = NULL;
+	}
 }
 
 template<class T>
@@ -63,6 +94,7 @@ bool QueueChain<T>::IsEmpty() const
 	return (front == NULL) ? true : false;
 }
 
+//链表队列正常情况下不会满，除非机器内存耗尽
 template<class T>
 bool QueueChain<T>::IsFull() const
 {

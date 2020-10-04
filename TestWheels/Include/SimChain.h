@@ -25,6 +25,7 @@ class SimSpace
 	friend SimChain<T>;
 public:
 	SimSpace(int maxSpaceSize = 100);
+	SimSpace(SimSpace<T>& s) = delete;//²»ÔÊÐí¿½±´
 	~SimSpace();
 	int Allocate();
 	void Deallocate(int i);

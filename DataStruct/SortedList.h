@@ -21,12 +21,13 @@ private:
 	V value;//数据
 };
 
-//k唯一，不能有重复，有序表的node元素按照k值从小到大排列
+//k唯一，不能有重复，有序表的node元素按照k值从小到大排列，查找使用二分法，速度快
 template<class K, class V>
 class SortedList
 {
 public:
 	SortedList(int maxSize = 20);
+	SortedList(const SortedList<K, V>& l);
 	~SortedList();
 	bool IsEmpty() const;
 	int Length() const;
@@ -49,6 +50,18 @@ SortedList<K,V>::SortedList(int maxSize)
 	length = 0;
 	capacity = maxSize;
 	node = new ListNode<K, V>[capacity];
+}
+
+template<class K, class V>
+SortedList<K, V>::SortedList(const SortedList<K, V>& l)
+{
+	length = l.length;
+	capacity = l.capacity;
+	node = new ListNode<K, V>[capacity];
+	for (int i = 0; i < capacity; i++)
+	{
+		node[i] = l.node[i];
+	}
 }
 
 template<class K, class V>
@@ -77,7 +90,7 @@ bool SortedList<K, V>::Search(const K& k, V& v, int& index) const
 {
 	int head = 0;
 	int tail = length - 1;
-	if (BinSearch(head, tail, k, v, index))
+	if (BinSearch(head, tail, k, v, index))//二分法查找
 		return true;
 	else
 		return false;
@@ -86,6 +99,7 @@ bool SortedList<K, V>::Search(const K& k, V& v, int& index) const
 template<class K, class V>
 SortedList<K, V>& SortedList<K, V>::Insert(const K& k, const V & v)
 {
+	//如果顺序表满，将容量扩大到原来的一倍
 	if (length == capacity)
 	{
 		capacity *= 2;
@@ -119,9 +133,10 @@ template<class K, class V>
 SortedList<K, V>& SortedList<K, V>::Delete(const K& k, V & v)
 {
 	int index = 0;
-	bool bRet = Search(k, v, index);
+	bool bRet = Search(k, v, index);//通过k找到数组中相应的下标
 	if (bRet)
 	{
+		//位置k以后的数据全部向前移动一个位置
 		for (int i = index; i < length - 1; i++)
 		{
 			node[i] = node[i + 1];
@@ -136,6 +151,7 @@ SortedList<K, V>& SortedList<K, V>::Delete(const K& k, V & v)
 	return *this;
 }
 
+//二分法查找
 template<class K, class V>
 bool SortedList<K, V>::BinSearch(int head, int tail, const K k, V& v, int& index) const
 {

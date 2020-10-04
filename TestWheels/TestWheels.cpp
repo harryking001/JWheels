@@ -18,6 +18,8 @@
 #include "SortedList.h"
 #include "SortedChain.h"
 #include "SkipList.h"
+#include "MaxHeap.h"
+#include "Jstring.h"
 
 using std::cin;
 using std::cout;
@@ -63,7 +65,7 @@ void TestLinList(structType st)
 	{
 		cout << "Please enter the command:" << endl;
 		getline(cin, strCmd);
-		if (strCmd == "Insert")
+		if (strCmd == "insert")
 		{
 			cout << "Please enter the index:" << endl;
 			getline(cin, strIndex);
@@ -112,7 +114,7 @@ void TestLinList(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "Delete")
+		else if (strCmd == "delete")
 		{
 			cout << "Please enter the index:" << endl;
 			getline(cin, strIndex);
@@ -157,7 +159,7 @@ void TestLinList(structType st)
 			}
 			cout << "Delete value is: " + to_string(value) << endl;
 		}
-		else if (strCmd == "Find")
+		else if (strCmd == "find")
 		{
 			cout << "Please enter the index:" << endl;
 			getline(cin, strIndex);
@@ -191,7 +193,7 @@ void TestLinList(structType st)
                 cout << "The value of index " + to_string(index) + " is: " + to_string(value) << endl;
 			}
 		}
-		else if (strCmd == "Search")
+		else if (strCmd == "search")
 		{
 			cout << "Please enter the value:" << endl;
 			getline(cin, strVal);
@@ -230,7 +232,7 @@ void TestLinList(structType st)
 				}
 			}
 		}
-		else if (strCmd == "Is Empty")
+		else if (strCmd == "is empty")
 		{
 		    switch (st)
 		    {
@@ -259,7 +261,7 @@ void TestLinList(structType st)
 				cout << "Not Empty!" << endl;
 			}
 		}
-		else if (strCmd == "Length")
+		else if (strCmd == "length")
 		{
 		    switch (st)
 		    {
@@ -281,7 +283,7 @@ void TestLinList(structType st)
 		    }
 		    cout << "The length is " + to_string(length) << endl;
 		}
-		else if (strCmd == "Erase")
+		else if (strCmd == "erase")
 		{
 		    switch (st)
 		    {
@@ -302,13 +304,50 @@ void TestLinList(structType st)
 		    	break;
 		    }
 		}
-		else if (strCmd == "Back")
+		else if (strCmd == "copy")
+		{
+			switch (st)
+			{
+			case sequenceType:
+			{
+                Sequence<int> sequence_copy(sequence);
+				cout << "Values in the sequence_copy:" << endl << endl;
+				sequence_copy.Output(cout);
+				break;
+			}
+			case chainType:
+			{
+                Chain<int> chain_copy(chain);
+				cout << "Values in the chain_copy:" << endl << endl;
+				chain_copy.Output(cout);
+				break;
+			}	
+			case circularChainType:
+			{
+                CircularChain<int> circularChain_copy(circularChain);
+				cout << "Values in the circularChain_copy:" << endl << endl;
+				circularChain_copy.Output(cout);
+                break;
+			}	
+			case dcChainType:
+			{
+                DCChain<int> dcChain_copy(dcChain);
+				cout << "Values in the dcChain_copy:" << endl << endl;
+				dcChain_copy.Output(cout);
+				break;
+			}
+			default:
+
+				break;
+		    }
+        }
+		else if (strCmd == "back")
 		{
 		    break;
 		}
 		else
 		{
-		cout << "Bad Command!" << endl << endl;
+		    cout << "Bad Command!" << endl << endl;
         }
 
 		switch (st)
@@ -346,7 +385,7 @@ void TestMemAlloc(structType st)
 		SimSpace<int> simSpace;
 		cout << "Please enter the command:" << endl;
 		getline(cin, strCmd);
-		if (strCmd == "Alloc")
+		if (strCmd == "alloc")
 		{
 			try
 			{
@@ -379,7 +418,7 @@ void TestMemAlloc(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "Dealloc")
+		else if (strCmd == "dealloc")
 		{
 			try
 			{
@@ -412,7 +451,7 @@ void TestMemAlloc(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "Back")
+		else if (strCmd == "back")
 		{
 			break;
 		}
@@ -435,7 +474,7 @@ void TestQueue(structType st)
 	{
 		cout << "Please enter the command:" << endl;
 		getline(cin, strCmd);
-		if (strCmd == "Is Empty")
+		if (strCmd == "is empty")
 		{
 			switch (st)
 			{
@@ -454,7 +493,7 @@ void TestQueue(structType st)
 			else
 				cout << "The queue is not empty" << endl;
 		}
-		else if (strCmd == "Is Full")
+		else if (strCmd == "is full")
 		{
 			switch (st)
 			{
@@ -473,7 +512,7 @@ void TestQueue(structType st)
 			else
 				cout << "The queue is not full" << endl;
 		}
-		else if (strCmd == "EnQueue")
+		else if (strCmd == "enqueue")
 		{
 			cout << "Please enter the value:" << endl;
 			getline(cin, strVal);
@@ -512,7 +551,7 @@ void TestQueue(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "DeQueue")
+		else if (strCmd == "dequeue")
 		{
 			try
 			{
@@ -547,7 +586,7 @@ void TestQueue(structType st)
 			}
 			cout << "Dequeue value is " + to_string(value) << endl;
 		}
-		else if (strCmd == "Erase")
+		else if (strCmd == "erase")
 		{
 		    switch (st)
 		    {
@@ -562,7 +601,30 @@ void TestQueue(structType st)
 		    	break;
 		    }
 		}
-		else if (strCmd == "Back")
+		else if (strCmd == "copy")
+		{
+			switch (st)
+			{
+			case circularQueueType:
+			{
+				CircularQueue<int> circularQueue_copy(circularQueue);
+				cout << "Values in the circularQueue_copy:" << endl << endl;
+				circularQueue_copy.Output(cout);
+				break;
+			}
+			case queueChainType:
+			{
+				QueueChain<int> queueChain_copy(queueChain);
+				cout << "Values in the queueChain_copy:" << endl << endl;
+				queueChain_copy.Output(cout);
+				break;
+			}
+			default:
+
+				break;
+			}
+		}
+		else if (strCmd == "back")
 		{
 		    break;
 		}
@@ -601,7 +663,7 @@ void TestStack(structType st)
 	{
 		cout << "Please enter the command:" << endl;
 		getline(cin, strCmd);
-		if (strCmd == "Is Empty")
+		if (strCmd == "is empty")
 		{
 			switch (st)
 			{
@@ -623,7 +685,7 @@ void TestStack(structType st)
 			else
 				cout << "The stack is not empty" << endl;
 		}
-		else if (strCmd == "Is Full")
+		else if (strCmd == "is full")
 		{
 			switch (st)
 			{
@@ -645,7 +707,7 @@ void TestStack(structType st)
 			else
 				cout << "The stack is not full" << endl;
 		}
-		else if (strCmd == "Push")
+		else if (strCmd == "push")
 		{
 			cout << "Please enter the value:" << endl;
 			getline(cin, strVal);
@@ -697,7 +759,7 @@ void TestStack(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "Pop")
+		else if (strCmd == "pop")
 		{
 			try
 			{
@@ -745,7 +807,7 @@ void TestStack(structType st)
 			}
 			cout << "Pop value is " + to_string(value) << endl;
 		}
-		else if (strCmd == "Erase")
+		else if (strCmd == "erase")
 		{
 		    switch (st)
 		    {
@@ -773,7 +835,39 @@ void TestStack(structType st)
 		    	break;
 		    }
 		}
-		else if (strCmd == "Back")
+		else if (strCmd == "copy")
+		{
+			switch (st)
+			{
+			case stackSequenceType:
+			{
+				StackSequence<int> stackSequence_copy(stackSequence);
+				cout << "Values in the stackSequence_copy:" << endl << endl;
+				stackSequence_copy.Output(cout);
+				break;
+			}
+			case stackChainType:
+			{
+				StackChain<int> stackChain_copy(stackChain);
+				cout << "Values in the stackChain_copy:" << endl << endl;
+				stackChain_copy.Output(cout);
+				break;
+			}
+			case doubleStackType:
+			{
+				DoubleStack<int> doubleStack_copy(doubleStack);
+				cout << "Values in the doubleStack_copy1:" << endl << endl;
+				doubleStack_copy.Output(cout, 1);
+				cout << "Values in the doubleStack_copy2:" << endl << endl;
+				doubleStack_copy.Output(cout, 2);
+				break;
+			}
+			default:
+
+				break;
+			}
+		}
+		else if (strCmd == "back")
 		{
 		    break;
 		}
@@ -821,7 +915,7 @@ void TestDictionary(structType st)
 	{
 		cout << "Please enter the command:" << endl;
 		getline(cin, strCmd);
-		if (strCmd == "Insert")
+		if (strCmd == "insert")
 		{
 			cout << "Please enter the key:" << endl;
 			getline(cin, strKey);
@@ -873,7 +967,7 @@ void TestDictionary(structType st)
 				cout << "Bad Call!" << endl << endl;
 			}
 		}
-		else if (strCmd == "Delete")
+		else if (strCmd == "delete")
 		{
 			cout << "Please enter the key:" << endl;
 			getline(cin, strKey);
@@ -921,7 +1015,7 @@ void TestDictionary(structType st)
 			}
 			cout << "Delete value is: " + to_string(value) << endl;
 		}
-		else if (strCmd == "Find")
+		else if (strCmd == "find")
 		{
 			cout << "Please enter the key:" << endl;
 			getline(cin, strKey);
@@ -965,7 +1059,7 @@ void TestDictionary(structType st)
 				break;
 			}
 		}
-		else if (strCmd == "Search")
+		else if (strCmd == "search")
 		{
 			cout << "Please enter the key:" << endl;
 			getline(cin, strKey);
@@ -1018,7 +1112,7 @@ void TestDictionary(structType st)
 				break;
 			}
 		}
-		else if (strCmd == "Is Empty")
+		else if (strCmd == "is empty")
 		{
 			switch (st)
 			{
@@ -1049,7 +1143,7 @@ void TestDictionary(structType st)
 				cout << "Not Empty!" << endl;
 			}
 		}
-		else if (strCmd == "Length")
+		else if (strCmd == "length")
 		{
 			switch (st)
 			{
@@ -1073,7 +1167,7 @@ void TestDictionary(structType st)
 			}
 			cout << "The length is " + to_string(length) << endl;
 		}
-		else if (strCmd == "Erase")
+		else if (strCmd == "erase")
 		{
 			switch (st)
 			{
@@ -1096,7 +1190,51 @@ void TestDictionary(structType st)
 				break;
 			}
 		}
-		else if (strCmd == "Back")
+		else if (strCmd == "copy")
+		{
+			switch (st)
+			{	
+			case sortedListType:
+			{
+				SortedList<int, int> sortedList_copy(sortedList);
+				cout << "Values in the sortedList_copy:" << endl << endl;
+				sortedList_copy.Output(cout);
+				break;
+			}
+			case sortedChainType:
+			{
+				SortedChain<int, int> sortedChain_copy(sortedChain);
+				cout << "Values in the sortedChain_copy:" << endl << endl;
+				sortedChain_copy.Output(cout);
+				break;
+			}
+			case skipListType:
+			{
+				SkipList<int, int> skipList_copy(skipList);
+				cout << "Values in the skipList_copy:" << endl << endl;
+				skipList_copy.Output(cout);
+				break;
+			}
+			case hashTableType:
+			{
+				HashTable<int, int> hashTable_copy(hashTable);
+				cout << "Values in the hashTable_copy:" << endl << endl;
+				hashTable_copy.Output(cout);
+				break;
+			}
+			case chainHashTableType:
+			{
+				ChainHashTable<int, int> chainHashTable_copy(chainHashTable);
+				cout << "Values in the chainHashTable_copy:" << endl << endl;
+				chainHashTable_copy.Output(cout);
+				break;
+			}
+			default:
+
+				break;
+			}
+		}
+		else if (strCmd == "back")
 		{
 		    break;
         }
@@ -1133,6 +1271,169 @@ void TestDictionary(structType st)
 
 	}
 
+}
+
+bool StringToArr(const string& strVals, int* arrVals)
+{
+	int k = 1;
+	int val = 0;
+	int j = 1;//数组下标从1开始
+	for (int i = strVals.length() - 1; i >= 0; i--)
+	{
+		if (',' == strVals[i])
+		{
+			arrVals[j++] = val;
+			k = 1;
+			val = 0;
+		}
+		else if(strVals[i] >= 48 && strVals[i] <= 57)
+		{
+			int tempVal = (int)(strVals[i] - 48);
+			val += k * tempVal;
+			k *= 10;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	arrVals[j++] = val;
+	return true;
+}
+
+void TestMaxHeap()
+{
+	MaxHeap<int> maxHeap;
+	int values[11] = { 0 };
+	string strValues, strCmd;
+	int val = 0;
+	while (true)
+	{
+		strCmd.clear();
+		strValues.clear();
+		for (int i = 0; i < 11; i++)
+		{
+			values[i] = 0;
+		}
+		maxHeap.Erase();
+		cout << "Please enter the command:" << endl;
+		getline(cin, strCmd);
+		if (strCmd == "sort")
+		{
+			//目前只能输入正整数
+			cout << "Please enter the values, separated by commas:" << endl;
+			getline(cin, strValues);
+			if (!StringToArr(strValues, values))
+			{
+				cout << "Values wrong! Please enter again!" << endl;
+				continue;
+			}
+			maxHeap.Initialize(values, 10);
+			cout << "Values from big to small: ";
+			while (maxHeap.Length() > 0)
+			{
+				maxHeap.DeleteMax(val);
+				cout << val << " ";
+			}
+			cout << endl;
+		}
+		else if (strCmd == "copy")
+		{
+			//目前只能输入正整数
+			cout << "Please enter the values, separated by commas:" << endl;
+			getline(cin, strValues);
+			if (!StringToArr(strValues, values))
+			{
+				cout << "Values wrong! Please enter again!" << endl;
+				continue;
+			}
+			maxHeap.Initialize(values, 10);
+			MaxHeap<int> maxHeap_copy(maxHeap);
+		    cout << "Values in the maxHeap_copy:" << endl << endl;
+			maxHeap_copy.Output(cout);
+		}
+		else if (strCmd == "back")
+		{
+			break;
+		}
+		else
+		{
+			cout << "Bad Command!" << endl << endl;
+		}
+
+	}
+}
+
+void TestJstring()
+{
+	Jstring jstrVal(NULL), jstrCmd(NULL), jstr1(NULL), jstr2(NULL);
+	while (true)
+	{
+		Jstring jsOutput("Please enter the command:");
+		cout << jsOutput << endl;
+		cin >> jstrCmd;
+		if (jstrCmd == "input")
+		{
+			jsOutput = "Please enter the string:";
+			cout << jsOutput << endl;
+			cin >> jstrVal;//不能有空格
+		}
+		else if (jstrCmd == "output")
+		{
+			jsOutput = "Output jstrVal:";
+			cout << jsOutput << endl;
+			cout << jstrVal << endl;
+		}
+		else if (jstrCmd == "compare")
+		{
+			jsOutput = "Please enter string1:";
+			cout << jsOutput << endl;
+			cin >> jstr1;//不能有空格
+			jsOutput = "Please enter string2:";
+			cout << jsOutput << endl;
+			cin >> jstr2;//不能有空格
+			if (jstr1 == jstr2)
+			{
+				jsOutput = "jstr1 == jstr2";
+				cout << jsOutput << endl;
+			}
+			else if (jstr1 > jstr2)
+			{
+				jsOutput = "jstr1 > jstr2";
+				cout << jsOutput << endl;
+			}
+			else if(jstr1 < jstr2)
+			{
+				jsOutput = "jstr1 < jstr2";
+				cout << jsOutput << endl;
+			}
+			else
+			{
+
+			}
+		}
+		else if (jstrCmd == "connect")
+		{
+			jsOutput = "Please enter string1:";
+			cout << jsOutput << endl;
+			cin >> jstr1;//不能有空格
+			jsOutput = "Please enter string2:";
+			cout << jsOutput << endl;
+			cin >> jstr2;//不能有空格
+			Jstring jstr = jstr1 + jstr2;
+			jsOutput = "Connected string is:";
+			cout << jsOutput << endl;
+			cout << jstr << endl;
+		}
+		else if (jstrCmd == "back")
+		{
+			break;
+		}
+		else
+		{
+			cout << "Bad Command!" << endl << endl;
+		}
+	}
 }
 
 void TestSequence()
@@ -1222,61 +1523,69 @@ int main()
 		cout << "Please enter the struct name:" << endl;
 		string strName;
 		getline(cin, strName);
-		if (strName == "Sequence")
+		if (strName == "sequence")
 		{
 		    TestSequence();
 		}
-		else if (strName == "Chain")
+		else if (strName == "chain")
 		{
 		    TestChain();
         }
-		else if (strName == "Circular Chain")
+		else if (strName == "circular chain")
 		{
 			TestCircularChain();
 		}
-		else if (strName == "DC Chain")
+		else if (strName == "dc chain")
 		{
 			TestDCChain();
 		}
-		else if (strName == "Circular Queue")
+		else if (strName == "circular queue")
 		{
 			TestCircularQueue();
 		}
-		else if (strName == "Queue Chain")
+		else if (strName == "queue chain")
 		{
 			TestQueueChain();
 		}
-		else if (strName == "Stack Sequence")
+		else if (strName == "stack sequence")
 		{
 			TestStackSequence();
 		}
-		else if (strName == "Stack Chain")
+		else if (strName == "stack chain")
 		{
 			TestStackChain();
 		}
-		else if (strName == "Double Stack")
+		else if (strName == "double stack")
 		{
 			TestDoubleStack();
 		}
-		else if (strName == "Sorted List")
+		else if (strName == "sorted list")
 		{
 			TestSortedList();
 		}
-		else if (strName == "Sorted Chain")
+		else if (strName == "sorted chain")
 		{
 			TestSortedChain();
 		}
-		else if (strName == "Skip List")
+		else if (strName == "skip list")
 		{
 			TestSkipList();
 		}
-		else if (strName == "Hash Table")
+		else if (strName == "hash table")
 		{
 			TestHashTable();
 		}
-		else if (strName == "Chain Hash Table")
+		else if (strName == "chain hash table")
 		{
 			TestChainHashTable();
+		}
+		else if (strName == "max heap")
+		{
+			TestMaxHeap();
+		}
+		else if (strName == "jstring")
+		{
+			TestJstring();
 		}
 		else
 		{

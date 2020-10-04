@@ -9,11 +9,13 @@
 using std::ostream;
 using std::endl;
 
+//键值k唯一
 template<class K, class V>
 class ChainHashTable
 {
 public:
 	ChainHashTable(int divisor = 11);
+	ChainHashTable(const ChainHashTable<K, V>& h);
 	~ChainHashTable();
 	bool IsEmpty() const;
 	int Length() const;
@@ -24,7 +26,7 @@ public:
 	void Erase();
 private:
 	int D;//除数
-	SortedChain<K, V>* ht;//有序链表数组，每个数组元素为一条有序链表
+	SortedChain<K, V>* sc;//有序链表数组，每个数组元素为一条有序链表
 	int hashFunc(const K& k)const;//散列（映射）函数
 };
 
@@ -32,23 +34,59 @@ template<class K, class V>
 ChainHashTable<K, V>::ChainHashTable(int divisor)
 {
 	D = divisor;
-	ht = new SortedChain<K, V>[D];
+	sc = new SortedChain<K, V>[D];
+}
+
+template<class K, class V>
+ChainHashTable<K, V>::ChainHashTable(const ChainHashTable<K, V>& h)
+{
+	D = h.D;
+	sc = new SortedChain<K, V>[D];
+	for (int i = 0; i < D; i++)
+	{
+		SortedChainNode<K, V>* pCur = h.sc[i].GetFirst();
+		SortedChainNode<K, V>* pPre = new SortedChainNode<K, V>();
+		if (pCur)
+		{
+			*pPre = *pCur;
+			sc[i].SetFirst(pPre);
+			pCur = pCur->next;
+		}
+		else
+		{
+			delete pPre;
+			pPre = NULL;
+		}
+		while (pCur)
+		{
+			SortedChainNode<K, V>* pNode = new SortedChainNode<K, V>();
+			*pNode = *pCur;
+			pPre->next = pNode;
+			pPre = pNode;
+			pCur = pCur->next;
+		}
+		if (pPre)
+		{
+			pPre->next = NULL;
+		}
+	}
 }
 
 template<class K, class V>
 ChainHashTable<K, V>::~ChainHashTable()
 {
 	D = 0;
-    delete[] ht;
-	ht = NULL;
+    delete[] sc;
+	sc = NULL;
 }
 
+//只要empty数组有一个不为空，哈希表就不为空
 template<class K, class V>
 bool ChainHashTable<K, V>::IsEmpty() const
 {
 	for (int i = 0; i < D; i++)
 	{
-		if (ht[i].IsEmpty() == false)
+		if (sc[i].IsEmpty() == false)
 		{
 			return false;
 		}
@@ -56,13 +94,14 @@ bool ChainHashTable<K, V>::IsEmpty() const
 	return true;
 }
 
+//遍历计算哈希表中不为空元素个数
 template<class K, class V>
 int ChainHashTable<K, V>::Length() const
 {
 	int length = 0;
 	for (int i = 0; i < D; i++)
 	{
-		length += ht[i].Length();
+		length += sc[i].Length();
 	}
 	return length;
 }
@@ -72,7 +111,8 @@ bool ChainHashTable<K, V>::Find(const K& k, V& v) const
 {
 	int i = hashFunc(k);
 	SortedChainNode<K,V>* node = NULL;
-    bool bRet = ht[i].Search(k, node);
+	//链地址法解决键值冲突，通过键值k找到有序链表数组中对应链表，然后在该链表中通过k找到元素
+    bool bRet = sc[i].Search(k, node);
 	if (bRet)
 	{
 		v = node->value;
@@ -84,7 +124,7 @@ template<class K, class V>
 ChainHashTable<K, V>& ChainHashTable<K, V>::Insert(const K& k, const V& v)
 {
 	int i = hashFunc(k);
-    ht[i].Insert(k,v);
+    sc[i].Insert(k,v);
 	return *this;
 }
 
@@ -92,7 +132,7 @@ template<class K, class V>
 ChainHashTable<K, V>& ChainHashTable<K, V>::Delete(const K& k,V& v)
 {
 	int i = hashFunc(k);
-    ht[i].Delete(k,v);
+    sc[i].Delete(k,v);
 	return *this;
 }
 
@@ -107,7 +147,7 @@ void ChainHashTable<K, V>::Output(ostream& out) const
 {
 	for (int i = 0; i < D; i++)
 	{
-		ht[i].Output(out);
+		sc[i].Output(out);
 	}
 }
 
@@ -116,7 +156,7 @@ void ChainHashTable<K, V>::Erase()
 {
 	for (int i = 0; i < D; i++)
 	{
-		ht[i].Erase();
+		sc[i].Erase();
 	}
 }
 

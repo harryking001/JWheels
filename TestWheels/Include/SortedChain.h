@@ -5,6 +5,7 @@
 #include "Define.h"
 #include "Exception.h"
 #include <iostream>
+#include "ChainHashTable.h"
 
 using std::ostream;
 using std::endl;
@@ -29,9 +30,12 @@ class SortedChain
 {
 public:
 	SortedChain();
+	SortedChain(const SortedChain<K, V>& c);
 	~SortedChain();
 	bool IsEmpty() const;
 	int Length() const;
+	SortedChainNode<K, V>* GetFirst() const;
+	void SetFirst(SortedChainNode<K, V>* f);
 	bool Search(const K& k, SortedChainNode<K, V>*& node) const;
 	SortedChain<K, V>& Insert(const K& k, const V& v);
 	SortedChain<K, V>& Delete(const K& k, V& v);
@@ -45,6 +49,36 @@ template<class K, class V>
 SortedChain<K, V>::SortedChain()
 {
     first = NULL;
+}
+
+template<class K, class V>
+SortedChain<K, V>::SortedChain(const SortedChain<K, V>& c)
+{
+	SortedChainNode<K, V>* pCur = c.first;
+	SortedChainNode<K, V>* pPre = new SortedChainNode<K, V>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		first = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur)
+	{
+		SortedChainNode<K, V>* pNode = new SortedChainNode<K, V>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+        pPre->next = NULL;
+	}
 }
 
 template<class K, class V>
@@ -72,6 +106,19 @@ int SortedChain<K, V>::Length() const
 	return length;
 }
 
+template<class K, class V>
+SortedChainNode<K, V>* SortedChain<K, V>::GetFirst() const
+{
+	return first;
+}
+
+template<class K, class V>
+void SortedChain<K, V>::SetFirst(SortedChainNode<K, V>* f)
+{
+	first = f;
+}
+
+//有序链表的查找还是需要一个个找
 template<class K, class V>
 bool SortedChain<K, V>::Search(const K& k, SortedChainNode<K, V>*& node) const
 {

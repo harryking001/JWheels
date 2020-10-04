@@ -13,6 +13,7 @@ class StackSequence
 {
 public:
 	StackSequence(int maxSize = 5);
+	StackSequence(const StackSequence<T>& s);
 	~StackSequence();
 	bool IsEmpty() const;
 	bool IsFull() const;
@@ -24,22 +25,34 @@ public:
 private:
     int top;
 	int maxTop;
-	T* element;
+	T* stack;
 };
 
 template<class T>
 StackSequence<T>::StackSequence(int maxSize)
 {
-    maxTop = maxSize - 1;
+    maxTop = maxSize - 1;//×î´óÕ»¶¥Î»ÖÃ£¨0~maxSize-1£©
 	top = -1;
-	element = new T[maxSize];
+	stack = new T[maxSize];
+}
+
+template<class T>
+StackSequence<T>::StackSequence(const StackSequence<T>& s)
+{
+	top = s.top;
+	maxTop = s.maxTop;
+	stack = new T[maxTop + 1];
+	for (int i = 0; i < maxTop + 1; i++)
+	{
+		stack[i] = s.stack[i];
+	}
 }
 
 template<class T>
 StackSequence<T>::~StackSequence()
 {
-	delete[] element;
-	element = NULL;
+	delete[] stack;
+	stack = NULL;
 }
 
 template<class T>
@@ -59,7 +72,7 @@ T StackSequence<T>::Top() const
 {
 	if(IsEmpty())
 		throw BadCall();
-	return element[top];
+	return stack[top];
 }
 
 template<class T>
@@ -67,7 +80,7 @@ StackSequence<T>& StackSequence<T>::Push(const T& x)
 {
     if(IsFull()) 
 		throw NoMem();
-	element[++top] = x;
+	stack[++top] = x;
 	return *this;
 }
 
@@ -76,7 +89,7 @@ StackSequence<T>& StackSequence<T>::Pop(T& x)
 {
     if(IsEmpty()) 
 		throw BadCall();
-	x = element[top--];
+	x = stack[top--];
 	return *this;
 }
 
@@ -85,7 +98,7 @@ void StackSequence<T>::Output(ostream& out) const
 {
 	for (int i = 0; i <= top; i++)
 	{
-		out << element[i] << " ";
+		out << stack[i] << " ";
 	}
 	out << endl;
 }

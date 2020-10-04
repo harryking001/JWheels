@@ -26,6 +26,7 @@ class Chain
 {
 public:
 	Chain();
+	Chain(const Chain<T>& c);
 	~Chain();
 public:
 	bool IsEmpty() const;
@@ -46,6 +47,36 @@ template<class T>
 Chain<T>::Chain()
 {
 	first = NULL;
+}
+
+template<class T>
+Chain<T>::Chain(const Chain<T>& c)
+{
+	ChainNode<T>* pCur = c.first;
+	ChainNode<T>* pPre = new ChainNode<T>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		first = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur)
+	{
+		ChainNode<T>* pNode = new ChainNode<T>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+		pPre->next = NULL;
+	}
 }
 
 template<class T>
@@ -73,6 +104,7 @@ int Chain<T>::Length() const
 	return length;
 }
 
+//寻找第k个位置的元素，位置从1开始
 template<class T>
 bool Chain<T>::Find(const int k, T& t) const
 {
@@ -80,6 +112,7 @@ bool Chain<T>::Find(const int k, T& t) const
 		return false;
 	int index = 1;
 	ChainNode<T>* pCur = first;
+	//元素不为空且位置小于k
 	while(pCur && index < k)
 	{
 		pCur = pCur->next;
@@ -94,6 +127,7 @@ bool Chain<T>::Find(const int k, T& t) const
 		return false;
 }
 
+//寻找元素t所在结点指针
 template<class T>
 bool Chain<T>::Search(const T& t, ChainNode<T>*& node) const
 {
@@ -135,16 +169,17 @@ Chain<T>& Chain<T>::Push_back(const T& t)
 template<class T>
 Chain<T>& Chain<T>::Insert (const int k, const T& t)
 {
-    if(k < 1)
+    if(k < 1)//从位置1开始
 		throw OutOfBounds();
     ChainNode<T>* pPrev = first;
     int index = 1;
+	//插入位置移动到k-1
 	while(pPrev && index < k - 1)
 	{
 		pPrev = pPrev->next;
 		index++;
 	}
-	if(k > 1 && !pPrev)
+	if(k > 1 && !pPrev)//考虑链表中插入第一个元素的情况
 		throw OutOfBounds();
 
     ChainNode<T>* pCur = new ChainNode<T>();
@@ -162,22 +197,23 @@ Chain<T>& Chain<T>::Insert (const int k, const T& t)
 	return *this;
 }
 
-
+//删除第k个位置的元素，位置从1开始
 template<class T>
 Chain<T>& Chain<T>::Delete(const int k, T& t)
 {
 	if (k < 1)
 		throw OutOfBounds();
-	if (first == NULL)
+	if (first == NULL)//空链表报错
 		throw BadCall();
 	ChainNode<T>* pPrev = first;
 	int index = 1;
+	//删除位置移动到k-1
     while (pPrev && index < k - 1)
 	{
 		pPrev = pPrev->next;
 		index++;
 	}
-    if (!pPrev || !pPrev->next)
+    if (!pPrev || !pPrev->next)//如果k-1或k位置元素为空，报错
 		throw OutOfBounds();
     ChainNode<T>* pCur = pPrev->next;
 	if (k == 1)
@@ -201,6 +237,7 @@ Chain<T>& Chain<T>::Swap(const int i, const int j)
 
 }
 
+//所有链表实现方式相同
 template<class T>
 void Chain<T>::Output(ostream& out) const
 {

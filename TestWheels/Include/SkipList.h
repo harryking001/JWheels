@@ -6,6 +6,9 @@
 #include <iostream>
 #include "time.h"
 
+using std::ostream;
+using std::endl;
+
 template <class K, class V>
 class SkipList;
 
@@ -27,7 +30,8 @@ template<class K, class V>
 class SkipList
 {
 public:
-	SkipList(int MaxLevel = 100, int TailKey = 100);
+	SkipList(int MaxLevel = 20, int TailKey = 100);
+	SkipList(const SkipList<K, V>& sl);
 	~SkipList();
 	bool IsEmpty() const;
 	int Length() const;
@@ -44,7 +48,7 @@ private:
 	int tailKey;//队尾键值极大
 	SkipNode<K, V>* head;//头结点
 	SkipNode<K, V>* tail;//尾结点
-	SkipNode<K, V>** last;//存放目标结点每一级的前一个结点指针
+	SkipNode<K, V>** last;//存放查找的目标结点每一级的前一个结点指针
 };
 
 template<class K, class V>
@@ -55,13 +59,50 @@ SkipList<K, V>::SkipList(int MaxLevel, int TailKey)
 	level = 0;
 	P = 0.5;
 	tailKey = TailKey;
-	head = new SkipNode<K, V>(MaxLevel+1);//级数从0开始
+	head = new SkipNode<K, V>(maxLevel +1);//级数从0开始
 	tail = new SkipNode<K, V>(0);
     tail->key = tailKey;
-	last = new SkipNode<K,V>*[MaxLevel+1];
+	last = new SkipNode<K,V>*[maxLevel +1];//每一级都有一个指针，指向每一级查找到的结点的前一个结点
 
 	for (int i = 0; i <= maxLevel; i++)//初始情况下头结点每一级的下一个结点都为尾结点
 		head->link[i] = tail;
+}
+
+template<class K, class V>
+SkipList<K, V>::SkipList(const SkipList<K, V>& sl)
+{
+	maxLevel = sl.maxLevel;
+	level = sl.level;
+	P = sl.P;
+	tailKey = sl.tailKey;
+	head = new SkipNode<K, V>(maxLevel + 1);
+	tail = new SkipNode<K, V>(0);
+	tail->key = tailKey;
+	last = new SkipNode<K, V> * [maxLevel + 1];
+	
+	SkipNode<K, V>* curNode_copy = sl.head;
+	SkipNode<K, V>* curNode = head;
+    while (curNode_copy->link[0] != sl.tail)
+    {
+    	SkipNode<K, V>* tempNode = new SkipNode<K, V>(maxLevel + 1);
+		tempNode->key = curNode_copy->link[0]->key;
+		tempNode->value = curNode_copy->link[0]->value;
+		curNode->link[0] = tempNode;
+		curNode = tempNode;
+		curNode_copy = curNode_copy->link[0];
+    }
+	curNode->link[0] = tail;
+
+	for (int i = 1; i < level; i++)
+	{
+		curNode_copy = sl.head;
+		curNode = head;
+		while (curNode_copy->link[i] != sl.tail)
+		{
+			//TODO
+		}
+	}
+
 }
 
 template<class K, class V>

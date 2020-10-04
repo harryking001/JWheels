@@ -8,11 +8,13 @@
 using std::ostream;
 using std::endl;
 
+//顺序表
 template<class T>
 class Sequence
 {
 public:
 	Sequence(int maxSize = 20);
+	Sequence(const Sequence<T>& s);
 	~Sequence();
 	T& operator[](int i) const;
 	Sequence<T>& operator=(const Sequence<T>& s);
@@ -37,8 +39,20 @@ template<class T>
 Sequence<T>::Sequence(int maxSize)
 {
 	length = 0;
-	capacity = maxSize;
+	capacity = maxSize;//顺序表初始容量
 	element = new T[capacity];
+}
+
+template<class T>
+Sequence<T>::Sequence(const Sequence<T>& s)
+{
+	length = s.length;
+	capacity = s.capacity;
+	element = new T[capacity];
+	for (int i = 0; i < capacity; i++)
+	{
+		element[i] = s.element[i];
+	}
 }
 
 template<class T>
@@ -105,14 +119,16 @@ bool Sequence<T>::Search(const T& t, int& index) const
 template<class T>
 Sequence<T>& Sequence<T>::Push_back(const T& t)
 {
+	//如果顺序表满，将容量扩大到原来的一倍
 	if (length == capacity)
 	{
 		capacity *= 2;
 		T* temp = new T[capacity];
+		//将老表中数据放到新表中并删除老表
 		for (int i = 0; i < length; i++)
 			temp[i] = element[i];
 		delete[] element;
-		element = temp;
+		element = temp;//指向新表内存
 		delete[] temp;
 	}
 	element[length++] = t;
@@ -125,17 +141,20 @@ Sequence<T>& Sequence<T>::Insert(const int k, const T& t)
 {
 	if (k < 0 || k > length)
 		throw OutOfBounds();
+	//如果顺序表满，将容量扩大到原来的一倍
 	if (length == capacity)
 	{
 		capacity *= 2;
 		T* temp = new T[capacity];
+		//将老表内存中的数据放到新表内存中并释放老表内存
 		for (int i = 0; i < length; i++)
 			temp[i] = element[i];
 		delete[] element;
-		element = temp;
+		element = temp;//指向新表内存
 		delete[] temp;
 		temp = NULL;
 	}
+	//位置k以后的数据全部向后移动一个位置
     for(int i = length -1;i >= k;i--)
 	{
 		element[i+1] = element[i];
@@ -150,6 +169,7 @@ Sequence<T>& Sequence<T>::Delete(const int k, T& t)
 {
 	if (Find(k, t))
 	{
+		//位置k以后的数据全部向前移动一个位置
 		for (int i = k; i < length; i++)
 			element[i] = element[i + 1];
 		length--;
@@ -186,7 +206,7 @@ void Sequence<T>::Output(ostream& out) const
 template<class T>
 void Sequence<T>::Erase()
 {
-	length = 0;
+	length = 0;//不需要释放内存
 }
 
 #endif

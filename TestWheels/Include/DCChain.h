@@ -23,6 +23,7 @@ class DCChain
 {
 public:
 	DCChain();
+	DCChain(const DCChain<T>& c);
 	~DCChain();
 	bool IsEmpty() const;
 	int Length() const;
@@ -42,10 +43,42 @@ private:
 template<class T>
 DCChain<T>::DCChain()
 {
-	first = new DCChainNode<T>();
+	first = new DCChainNode<T>();//空链表时first的前后指针都指向自己
 	first->next = first;
 	first->prev = first;
 	length = 0;
+}
+
+template<class T>
+DCChain<T>::DCChain(const DCChain<T>& c)
+{
+	DCChainNode<T>* pCur = c.first;
+	DCChainNode<T>* pPre = new DCChainNode<T>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		first = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur != c.first)
+	{
+		DCChainNode<T>* pNode = new DCChainNode<T>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pNode->prev = pPre;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+		pPre->next = first;
+		first->prev = pPre;
+	}
 }
 
 template<class T>
@@ -75,7 +108,7 @@ bool DCChain<T>::Find(const int k, T& t) const
 	if (k < 1 || k > length || first->next == first)
 		return false;
 	DCChainNode<T>* pCur = first->next;
-	for (int i = 1; i < k; i++)
+	for (int i = 1; i < k; i++)//位置移动到k
 	{
 		pCur = pCur->next;
 	}
@@ -88,7 +121,7 @@ bool DCChain<T>::Search(const T& t, DCChainNode<T>*& node) const
 {
 	if (first->next == first)
 		return false;
-	DCChainNode<T>* pCur = first->next;
+	DCChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	int index = 1;
 	while (pCur != first)
 	{
@@ -121,8 +154,8 @@ DCChain<T>& DCChain<T>::Insert(const int k, const T& t)
 {
 	if (k < 1 || k > length + 1)
 		throw OutOfBounds();
-	DCChainNode<T>* pPrev = first->next;
-	for (int i = 1; i < k - 1; i++)
+	DCChainNode<T>* pPrev = first->next;//从哑元结点的后一个元素开始
+	for (int i = 1; i < k - 1; i++)//插入位置移动到k-1
 	{
 		pPrev = pPrev->next;
 	}
@@ -153,8 +186,8 @@ DCChain<T>& DCChain<T>::Delete(const int k, T& t)
 		throw OutOfBounds();
 	if (first == NULL)
 	    throw BadCall();
-	DCChainNode<T>* pCur = first->next;
-	for (int i = 1; i < k; i++)
+	DCChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
+	for (int i = 1; i < k; i++)//删除位置移动到k
 	{
 		pCur = pCur->next;
 	}
@@ -182,10 +215,11 @@ DCChain<T>& DCChain<T>::Swap(const int i, const int j)
 	
 }
 
+//所有链表实现方式相同
 template<class T>
 void DCChain<T>::Output(ostream& out) const
 {
-	DCChainNode<T>* pCur = first->next;
+	DCChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	while (pCur != first)
 	{
 		out << pCur->data << " ";
@@ -199,7 +233,7 @@ template<class T>
 void DCChain<T>::Erase()
 {
 	DCChainNode<T>* pTemp = NULL;
-	DCChainNode<T>* pCur = first->next;
+	DCChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	while (pCur != first)
 	{
 		pTemp = pCur;

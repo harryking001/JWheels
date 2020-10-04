@@ -16,12 +16,13 @@ private:
 	CircularChainNode<T>* next;
 };
 
-//循环队列
+//循环链表
 template <class T>
 class CircularChain
 {
 public:
 	CircularChain();
+	CircularChain(const CircularChain<T>& c);
 	~CircularChain();
 public:
 	bool IsEmpty() const;
@@ -36,7 +37,7 @@ public:
 	void Erase();
 private:
 	CircularChainNode<T>* first;//哑元头结点，方便编程
-	int length;
+	int length;//长度变量可以简化程序
 };
 
 template<class T>
@@ -45,6 +46,36 @@ CircularChain<T>::CircularChain()
 	first = new CircularChainNode<T>();
 	first->next = first;
 	length = 0;
+}
+
+template<class T>
+CircularChain<T>::CircularChain(const CircularChain<T>& c)
+{
+	CircularChainNode<T>* pCur = c.first;
+	CircularChainNode<T>* pPre = new CircularChainNode<T>();
+	if (pCur)
+	{
+		*pPre = *pCur;
+		first = pPre;
+		pCur = pCur->next;
+	}
+	else
+	{
+		delete pPre;
+		pPre = NULL;
+	}
+	while (pCur != c.first)
+	{
+		CircularChainNode<T>* pNode = new CircularChainNode<T>();
+		*pNode = *pCur;
+		pPre->next = pNode;
+		pPre = pNode;
+		pCur = pCur->next;
+	}
+	if (pPre)
+	{
+		pPre->next = first;
+	}
 }
 
 template<class T>
@@ -73,7 +104,7 @@ bool CircularChain<T>::Find(const int k, T& t) const
 	//从位置1开始
 	if (k < 1 || k > length || first->next == first)
 		return false;
-	CircularChainNode<T>* pCur = first->next;
+	CircularChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	for(int i = 1;i < k;i++)
 	{
 		pCur = pCur->next;
@@ -87,7 +118,7 @@ bool CircularChain<T>::Search(const T& t, CircularChainNode<T>*& node) const
 {
 	if (first->next == first)
 		return false;
-	CircularChainNode<T>* pCur = first->next;
+	CircularChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	int index = 1;
 	while (pCur != first)
 	{
@@ -105,7 +136,7 @@ bool CircularChain<T>::Search(const T& t, CircularChainNode<T>*& node) const
 template<class T>
 CircularChain<T>& CircularChain<T>::Push_back(const T& t)
 {
-	CircularChainNode<T>* pCur = first->next;
+	CircularChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	CircularChainNode<T>* pLast = pCur;
 	CircularChainNode<T>* pNew = new CircularChainNode<T>();
 	pNew->data = t;
@@ -129,10 +160,11 @@ CircularChain<T>& CircularChain<T>::Push_back(const T& t)
 template<class T>
 CircularChain<T>& CircularChain<T>::Insert(const int k, const T& t)
 {
-	//从位置1开始
+	//从位置1开始，位置length+1是在最后一个元素后面插入新元素
 	if (k < 1 || k > length + 1)
 		throw OutOfBounds();
-	CircularChainNode<T>* pPrev = first->next;
+	CircularChainNode<T>* pPrev = first->next;//从哑元结点的后一个元素开始
+	//插入位置移动到k-1
 	for (int i = 1; i < k - 1; i++)
 	{
 		pPrev = pPrev->next;
@@ -152,15 +184,16 @@ CircularChain<T>& CircularChain<T>::Insert(const int k, const T& t)
 	length++;
 	return *this;
 }
+
 template<class T>
 CircularChain<T>& CircularChain<T>::Delete(const int k, T& t)
 {
 	//从位置1开始
 	if (k < 1 || k > length)
 		throw OutOfBounds();
-	if (first->next == first)
+	if (first->next == first)//空链表
 	    throw BadCall();
-	CircularChainNode<T>* pPrev = first->next;
+	CircularChainNode<T>* pPrev = first->next;//从哑元结点的后一个元素开始
     for (int i = 1; i < k - 1; i++)
 	{
 		pPrev = pPrev->next;
@@ -188,10 +221,11 @@ CircularChain<T>& CircularChain<T>::Swap(const int i, const int j)
 	
 }
 
+//所有链表实现方式相同
 template<class T>
 void CircularChain<T>::Output(ostream& out) const
 {
-	CircularChainNode<T>* pCur = first->next;
+	CircularChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	while (pCur != first)
 	{
 		out << pCur->data << " ";
@@ -205,7 +239,7 @@ template<class T>
 void CircularChain<T>::Erase()
 {
 	CircularChainNode<T>* pTemp = NULL;
-	CircularChainNode<T>* pCur = first->next;
+	CircularChainNode<T>* pCur = first->next;//从哑元结点的后一个元素开始
 	while (pCur != first)
 	{
 		pTemp = pCur;

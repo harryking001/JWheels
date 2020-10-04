@@ -14,6 +14,7 @@ class CircularQueue
 {
 public:
 	CircularQueue(int maxQueueSize = 5);
+	CircularQueue(const CircularQueue<T>& q);
 	~CircularQueue();
 	bool IsEmpty() const;
 	bool IsFull() const;
@@ -34,6 +35,19 @@ CircularQueue<T>::CircularQueue(int maxQueueSize)
     maxSize = maxQueueSize + 1;//实际空间比数据多一个，用于判断队满
 	queue = new T[maxSize];
 	front = rear = 0;
+}
+
+template<class T>
+CircularQueue<T>::CircularQueue(const CircularQueue<T>& q)
+{
+	front = q.front;
+	rear = q.rear;
+	maxSize = q.maxSize;
+	queue = new T[maxSize];
+	for (int i = 0; i < maxSize; i++)
+	{
+		queue[i] = q.queue[i];
+	}
 }
 
 template<class T>
